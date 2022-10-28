@@ -152,7 +152,6 @@
     <Compile Include="Models\DeletedAircraft.cs" />
     <Compile Include="Models\Blocked.cs" />
     <Compile Include="Models\DeletedCompany.cs" />
-    <Compile Include="Models\ModelPassenger\Address.cs" />
     <Compile Include="Models\DeletedPassenger.cs" />
     <Compile Include="Models\Passenger.cs" />
     <Compile Include="Models\Restricted.cs" />
@@ -186,6 +185,7 @@
   <ItemGroup>
     <Folder Include="Models\ModelAircraft\" />
     <Folder Include="Models\ModelCompany\" />
+    <Folder Include="Models\ModelPassenger\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MongoDB.Libmongocrypt.1.6.0\build\MongoDB.Libmongocrypt.targets" Condition="Exists('..\packages\MongoDB.Libmongocrypt.1.6.0\build\MongoDB.Libmongocrypt.targets')" />
