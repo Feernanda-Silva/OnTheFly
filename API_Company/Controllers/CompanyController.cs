@@ -68,7 +68,7 @@ namespace API_Company.Controllers
             {
                 if (CnpjValidator(company.Cnpj) == true)
                 {
-                    company.Cnpj = FormatCnpj(company.Cnpj);
+                   
                     System.TimeSpan tempoAbertura = DateTime.Now.Subtract(DateTime.Parse(company.DtOpen)); //Verificação: Tempo de abertura(6 meses)
 
                     if (tempoAbertura.TotalDays >= 180)
