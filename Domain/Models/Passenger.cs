@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.ComponentModel.DataAnnotations;
+using Domain.Models;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Passenger_API.Models

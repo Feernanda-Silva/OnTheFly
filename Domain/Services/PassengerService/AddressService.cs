@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Domain.Models;
+using Newtonsoft.Json;
 using Passenger_API.Models;
 using System.Net.Http;
 using System.Threading.Tasks;

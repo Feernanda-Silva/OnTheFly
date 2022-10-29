@@ -11,12 +11,12 @@ namespace Domain.Models
 
         [StringLength(100)]
         [JsonProperty("logradouro")]
-        public string? Street { get; set; }
+        public string Street { get; set; }
 
         public int Number { get; set; }
 
         [StringLength(10)]
-        public string? Complement { get; set; }
+        public string Complement { get; set; }
 
         [StringLength(30)]
         [JsonProperty("localidade")]
