@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using API_Aircraft.Models;
 using API_Aircraft.Utils;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 
 namespace API_Aircraft.Service
 {
@@ -47,5 +50,22 @@ namespace API_Aircraft.Service
         #region Delete AirCraft
         public void RemoveAircraft(Aircraft aircraftIn) => _aircraftService.DeleteOne(aircraft => aircraft.RAB == aircraftIn.RAB);
         #endregion
+
+
+        //public async Task<Aircraft> GetAircraft()
+        //{
+
+        //    Aircraft aircraft;
+        //    using (HttpClient _aircraftClient = new HttpClient())
+        //    {
+        //        HttpResponseMessage response = await _aircraftClient.GetAsync("https://viacep.com.br/ws/" + cep + "/json/");
+        //        //var aircraftJson = await response.Content.ReadAsStringAsync();
+        //        if (response.IsSuccessStatusCode)
+        //            return aircraft = JsonConvert.DeserializeObject<Aircraft>(aircraftJson);
+        //        else
+        //            return null;
+
+        //    }
+        //}
     }
 }
