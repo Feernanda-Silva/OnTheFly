@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using API_Aircraft.Models;
 using Domain.Models;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -17,9 +19,9 @@ namespace API_Company.Models
         public string Name { get; set; }
         [StringLength(30)]
         public string NameOpt { get; set; }
-        public string DtOpen { get; set; }
+        public DateTime DtOpen { get; set; }
         public bool Status { get; set; }
         public Address Address { get; set; }
-
+        public Aircraft Aircraft { get; set; }
     }
 }

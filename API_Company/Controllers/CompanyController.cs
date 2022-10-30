@@ -24,6 +24,7 @@ namespace API_Company.Controllers
             _deletedService = deletedService;
             _blockedService = blockedService;
             _addressService = addressService;
+            
         }
 
         [HttpGet]
@@ -69,13 +70,14 @@ namespace API_Company.Controllers
                 if (CnpjValidator(company.Cnpj) == true)
                 {
                    
-                    System.TimeSpan tempoAbertura = DateTime.Now.Subtract(DateTime.Parse(company.DtOpen)); //Verificação: Tempo de abertura(6 meses)
+                    System.TimeSpan tempoAbertura = DateTime.Now.Subtract(company.DtOpen); //Verificação: Tempo de abertura(6 meses)
 
                     if (tempoAbertura.TotalDays >= 180)
                     {
                         if (company.Status == false)
                         {
                             _companyService.Create(company);
+                          
                             return CreatedAtRoute("GetCompany", new { cnpj = company.Cnpj.ToString() }, company);
                         }
 
@@ -87,9 +89,11 @@ namespace API_Company.Controllers
                             blocked.NameOpt = company.NameOpt;
                             blocked.DtOpen = company.DtOpen;
                             blocked.Adress = company.Address;
+                            blocked.Aircraft = company.Aircraft;
 
                             _blockedService.Create(blocked);
                             _companyService.Create(company);
+                            _companyService.PostAircraft(company.Aircraft);
                             return CreatedAtRoute("GetCompany", new { cnpj = company.Cnpj.ToString() }, company);
                         }
                     }
@@ -163,7 +167,7 @@ namespace API_Company.Controllers
         [HttpDelete]
         public ActionResult<Company> Delete(string cnpj)
         {
-            FormatCnpj(cnpj);
+            cnpj= FormatCnpj(cnpj);
 
             Company company = _companyService.Get(cnpj);
             if (company == null)
@@ -177,6 +181,7 @@ namespace API_Company.Controllers
             deleted.NameOpt = company.NameOpt;
             deleted.DtOpen = company.DtOpen;
             deleted.Address = company.Address;
+            deleted.Aircraft = company.Aircraft;
 
             _deletedService.Create(deleted);
             _companyService.Remove(company);

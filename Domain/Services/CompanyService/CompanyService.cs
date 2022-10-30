@@ -1,9 +1,13 @@
 ﻿
-
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using API_Aircraft.Models;
 using API_Company.Utils;
 using Domain.Models;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 
 namespace API_Company.Services
 {
@@ -22,6 +26,22 @@ namespace API_Company.Services
         {
             _company.InsertOne(company);
             return company; 
+        }
+
+        public async Task<Aircraft> PostAircraft(Aircraft aircraft)
+        {
+
+            using (HttpClient _aircraftClient = new HttpClient())
+            {
+                JsonContent content = JsonContent.Create(aircraft); 
+                HttpResponseMessage response = await _aircraftClient.PostAsync("https://localhost:44321/api/Aircraft", content);
+                var aircraftJson = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                    return aircraft = JsonConvert.DeserializeObject<Aircraft>(aircraftJson);
+                else
+                    return null;
+
+            }
         }
 
         public List<Company> Get() => _company.Find<Company>(company => true).ToList();
