@@ -34,7 +34,7 @@ namespace API_Company.Services
             using (HttpClient _aircraftClient = new HttpClient())
             {
                 JsonContent content = JsonContent.Create(aircraft); 
-                HttpResponseMessage response = await _aircraftClient.PostAsync("https://localhost:44321/api/Aircraft", content);
+                HttpResponseMessage response = await _aircraftClient.PostAsync("https://localhost:44366/api/Aircraft", content);
                 var aircraftJson = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                     return aircraft = JsonConvert.DeserializeObject<Aircraft>(aircraftJson);

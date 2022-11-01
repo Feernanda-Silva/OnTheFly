@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using API_Company.Models;
 using API_Company.Services;
 using Domain.Models;
@@ -45,9 +46,9 @@ namespace API_Company.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Company> Create(Company company)
+        public async Task<ActionResult<Company>> CreateAsync(CompanyDTO companyDTO)
         {
-            var cep = company.Address.ZipCode;
+            var cep = companyDTO.Company.Address.ZipCode;
             var address = _addressService.GetAdress(cep).Result;
 
             if (address == null)
@@ -57,44 +58,44 @@ namespace API_Company.Controllers
 
             else
             {
-                address.Number = company.Address.Number;
-                address.Complement = company.Address.Complement;
-                company.Address = address;
+                address.Number = companyDTO.Company.Address.Number;
+                address.Complement = companyDTO.Company.Address.Complement;
+                companyDTO.Company.Address = address;
             }
 
 
-            company.Cnpj = FormatCnpj(company.Cnpj);
-            var companyCnpj = _companyService.Get(company.Cnpj); //Verificação: Cnpj existente na db
+            companyDTO.Company.Cnpj = FormatCnpj(companyDTO.Company.Cnpj);
+            var companyCnpj = _companyService.Get(companyDTO.Company.Cnpj); //Verificação: Cnpj existente na db
             if (companyCnpj == null)
             {
-                if (CnpjValidator(company.Cnpj) == true)
+                if (CnpjValidator(companyDTO.Company.Cnpj) == true)
                 {
                    
-                    System.TimeSpan tempoAbertura = DateTime.Now.Subtract(company.DtOpen); //Verificação: Tempo de abertura(6 meses)
+                    System.TimeSpan tempoAbertura = DateTime.Now.Subtract(companyDTO.Company.DtOpen); //Verificação: Tempo de abertura(6 meses)
 
                     if (tempoAbertura.TotalDays >= 180)
                     {
-                        if (company.Status == false)
+                        if (companyDTO.Company.Status == false)
                         {
-                            _companyService.Create(company);
-                          
-                            return CreatedAtRoute("GetCompany", new { cnpj = company.Cnpj.ToString() }, company);
+                            _companyService.Create(companyDTO.Company);
+                            await _companyService.PostAircraft(companyDTO.Aircraft);
+
+                            return CreatedAtRoute("GetCompany", new { cnpj = companyDTO.Company.Cnpj.ToString() }, companyDTO.Company);
                         }
 
                         else
                         {
                             Blocked blocked = new Blocked();
-                            blocked.Cnpj = company.Cnpj;
-                            blocked.Name = company.Name;
-                            blocked.NameOpt = company.NameOpt;
-                            blocked.DtOpen = company.DtOpen;
-                            blocked.Adress = company.Address;
-                            blocked.Aircraft = company.Aircraft;
+                            blocked.Cnpj = companyDTO.Company.Cnpj;
+                            blocked.Name = companyDTO.Company.Name;
+                            blocked.NameOpt = companyDTO.Company.NameOpt;
+                            blocked.DtOpen = companyDTO.Company.DtOpen;
+                            blocked.Adress = companyDTO.Company.Address;
+                            
 
                             _blockedService.Create(blocked);
-                            _companyService.Create(company);
-                            _companyService.PostAircraft(company.Aircraft);
-                            return CreatedAtRoute("GetCompany", new { cnpj = company.Cnpj.ToString() }, company);
+                            _companyService.Create(companyDTO.Company);
+                            return CreatedAtRoute("GetCompany", new { cnpj = companyDTO.Company.Cnpj.ToString() }, companyDTO.Company);
                         }
                     }
 
@@ -114,6 +115,7 @@ namespace API_Company.Controllers
             {
                 return BadRequest("Cnpj já cadastrado");
             }
+
         }
 
         [HttpPut]
@@ -182,8 +184,7 @@ namespace API_Company.Controllers
             deleted.NameOpt = company.NameOpt;
             deleted.DtOpen = company.DtOpen;
             deleted.Address = company.Address;
-            deleted.Aircraft = company.Aircraft;
-
+ 
             _deletedService.Create(deleted);
             _companyService.Remove(company);
 

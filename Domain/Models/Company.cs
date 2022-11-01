@@ -23,8 +23,13 @@ namespace Domain.Models
         public DateTime DtOpen { get; set; }
         public bool? Status { get; set; }
         public Address Address { get; set; }
-        public Aircraft Aircraft { get; set; }
 
+    }
+
+    public class CompanyDTO 
+    {
+        public Company Company { get; set; }
+        public Aircraft Aircraft { get; set; }
     }
 }
 

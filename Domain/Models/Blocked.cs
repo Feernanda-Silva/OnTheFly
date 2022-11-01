@@ -24,7 +24,5 @@ namespace API_Company.Models
 
         public Address Adress { get; set; }
 
-        public Aircraft Aircraft{ get; set; }
-
     }
 }
